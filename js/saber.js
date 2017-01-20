@@ -24,45 +24,30 @@ scene.add(light);
 
 camera.position.z = 5;
 
-var xRate = 0;
-var yRate = 0;
+var xRot = 0
+var yRot = 0;
+var zRot = 0;
 
 function render() {
 	requestAnimationFrame( render );
 
-	cube.rotation.x = (cube.rotation.x + xRate) %  (2 * Math.PI);
-	cube.rotation.y = (cube.rotation.y + yRate) %  (2 * Math.PI);
+	cube.rotation.x = xRot;
+	cube.rotation.y = yRot;
+	cube.rotation.z = zRot;
 
 	renderer.render( scene, camera );
 
 
 }
 
-window.onkeydown = function(e) {
-   var key = e.keyCode ? e.keyCode : e.which;
-   switch(key){
-   	case 37: yRate = - 0.02; break; // left
-   	case 38: xRate = - 0.02; break; // up
-   	case 39: yRate = 0.02; break; // right
-   	case 40: xRate = 0.02; break; // down
-   }
-}
-
-window.onkeyup = function() {
-	xRate = 0;
-	yRate = 0;
-}
-
 render();
 
-// var socket = io.connect('http://localhost:3000');
-
-// socket.on('news', function (data) {
-// console.log(data);
-// socket.emit('event', { my: 'data' });
-// });
-
-
+function setRotations(o){
+	console.log(o)
+	xRot = o['xRot'];
+	yRot = o['yRot'];
+	zRot = o['zRot'];
+}
 
 
 

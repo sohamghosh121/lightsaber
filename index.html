@@ -63,40 +63,7 @@
 			<button class="btn" onclick="spawnConnection()"> New Connection </button>
 		</div>
 
-
-
-		<script>
-			var randomChannelGenerator = function (length) {
-				var text = "";
-				var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-				for (var i = 0; i < length; i++) {
-					text += possible.charAt(Math.floor(Math.random() * possible.length));
-				}
-				return text;
-			}
-
-			var socketConn;
-			var channelId;
-
-			var spawnConnection = function() {
-				var channelId = randomChannelGenerator(12);
-				var qrcode = new QRCode(document.getElementById("qrcode"), {width: 160, height: 160});
-				qrcode.makeCode(channelId);
-				$.ajax({
-					url: 'http://localhost:3000/openConnection',
-					data: {id: channelId}
-				}).done(function(data){
-					if (data.success){
-						socketConn = io.connect('http://localhost:5000/' + channelId);
-						socketConn.on('data-recv', function(data){
-							console.log(data);
-						});
-					}
-				});
-			}
-
-			
-		</script>
+		<script src="./js/sockets.js"></script>
 
 	</body>
 </html>
