@@ -1,0 +1,20 @@
+{
+  "name": "lightsaber",
+  "version": "1.0.0",
+  "description": "A light saber that moves as your phone moves",
+  "main": "saber.js",
+  "dependencies": {
+    "express": "^4.14.0",
+    "socket.io": "^1.7.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "lll"
+  },
+  "author": "Soham Ghosh",
+  "license": "ISC"
+}
