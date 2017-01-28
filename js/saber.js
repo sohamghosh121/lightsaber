@@ -43,10 +43,9 @@ function render() {
 render();
 
 function setRotations(o){
-	console.log(o)
-	xRot = o['xRot'];
-	yRot = o['yRot'];
-	zRot = o['zRot'];
+	xRot = o['x'];
+	yRot = o['y'];
+	zRot = o['z'];
 }
 
 
