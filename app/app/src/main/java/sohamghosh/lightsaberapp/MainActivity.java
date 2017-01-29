@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,12 +27,12 @@ import io.socket.emitter.Emitter;
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     private Button btn;
+    private ImageView lightsaberBlade;
 
     private String channelId = "iOpC09Pf7e0Z";
     private String baseUrl = "http://192.168.0.146:5000/";
 
     private Socket socket;
-    private boolean readyToSend;
     private JSONObject data;
 
     private SensorManager mSensorManager;
@@ -42,18 +45,76 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btn = (Button) this.findViewById(R.id.scanCodeButton);
-
+        lightsaberBlade = (ImageView) this.findViewById(R.id.lightsaberBlade);
+        lightsaberBlade.setVisibility(View.GONE);
         this.setupSensor();
+        this.startLightSaber();
+    }
 
+    private void startLightSaber() {
+        this.btn.setText("START");
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // do QR code scanning here
                 MainActivity.this.setupWebsocket();
+                MainActivity.this.animateLightSaber(true);
+                MainActivity.this.stopLightSaber(); // set button to stop mode
             }
         });
+    }
 
+    private void stopLightSaber() {
+        this.btn.setText("STOP");
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // do QR code scanning here
+                MainActivity.this.stopDoingSensorStuff();
+                MainActivity.this.socket.disconnect();
+                MainActivity.this.animateLightSaber(false);
+                MainActivity.this.startLightSaber(); // set button to start mode
+            }
+        });
+    }
 
+    private void animateLightSaber(boolean in){
+        Animation a;
+        if (in){
+            a = new AlphaAnimation(0.00f, 1.00f);
+            a.setDuration(1000);
+            a.setAnimationListener(new Animation.AnimationListener() {
+
+                public void onAnimationStart(Animation animation) {
+                    MainActivity.this.lightsaberBlade.setVisibility(View.VISIBLE);
+
+                }
+
+                public void onAnimationRepeat(Animation animation) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                public void onAnimationEnd(Animation animation) {
+                }
+            });
+        } else {
+            a = new AlphaAnimation(1.00f, 0.00f);
+            a.setDuration(1000);
+            a.setAnimationListener(new Animation.AnimationListener() {
+
+                public void onAnimationStart(Animation animation) {
+                }
+
+                public void onAnimationRepeat(Animation animation) {
+                }
+
+                public void onAnimationEnd(Animation animation) {
+                    MainActivity.this.lightsaberBlade.setVisibility(View.GONE);
+                }
+            });
+        }
+        this.lightsaberBlade.startAnimation(a);
     }
 
     private void setupSensor() {
@@ -97,11 +158,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-
-    private void sendWebsocketData(){
-
-    }
-
     private void startDoingSensorStuff(){
         mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_GAME);
     }
@@ -113,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         float[] values = sensorEvent.values;
-        JSONObject data = new JSONObject();
+        data = new JSONObject();
         try {
             data.put("x", values[0]);
             data.put("y", values[1]);
