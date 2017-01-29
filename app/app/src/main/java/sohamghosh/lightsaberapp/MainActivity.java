@@ -1,6 +1,7 @@
 package sohamghosh.lightsaberapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager mSensorManager;
     private Sensor mSensor;
 
+    final static int QRCODE_REQUEST = 1;
 
 
     @Override
@@ -57,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onClick(View view) {
                 // do QR code scanning here
+                Intent qrIntent = new Intent(MainActivity.this, QRCodeActivity.class);
+                startActivityForResult(qrIntent, QRCODE_REQUEST);
                 MainActivity.this.setupWebsocket();
                 MainActivity.this.animateLightSaber(true);
                 MainActivity.this.stopLightSaber(); // set button to stop mode
