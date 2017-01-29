@@ -59,10 +59,23 @@ public class QRCodeActivity extends AppCompatActivity {
                 Manifest.permission.CAMERA);
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
             Log.d("QRCODE", "Has camera permissions");
+            this.startCamera();
         } else {
             this.requestPermissions(new String[]{ Manifest.permission.CAMERA}, 0);
         }
 
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int reqCode, String[] permissions, int[] grantResults) {
+        if (reqCode == 0){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                this.startCamera();
+        }
+    }
+
+    private void startCamera() {
         mCameraManager = (CameraManager) getSystemService(getApplicationContext().CAMERA_SERVICE);
         try {
             String cameraId = mCameraManager.getCameraIdList()[0];
@@ -86,7 +99,6 @@ public class QRCodeActivity extends AppCompatActivity {
                     } catch (CameraAccessException e) {
                         Log.e("QRCODE", "Could not access camera");
                     }
-//                    cameraDevice.createCaptureSession(new ArrayList<Surface>(mSurface));
                 }
 
                 @Override
@@ -105,13 +117,6 @@ public class QRCodeActivity extends AppCompatActivity {
             Log.e("QRCODE", "Could not access camera");
         }
 
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int reqCode, String[] permissions, int[] grantResults) {
-        if (reqCode == 0){
-            Log.d("QRCODE", "Permissions");
-        }
     }
 
     private void detect(){

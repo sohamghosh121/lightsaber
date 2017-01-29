@@ -5,7 +5,7 @@ android {
     buildToolsVersion '23.0.1'
     defaultConfig {
         applicationId "sohamghosh.lightsaberapp"
-        minSdkVersion 23
+        minSdkVersion 21
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"

@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onClick(View view) {
                 // do QR code scanning here
                 Intent qrIntent = new Intent(MainActivity.this, QRCodeActivity.class);
-//                startActivityForResult(qrIntent, QRCODE_REQUEST);
+                startActivityForResult(qrIntent, QRCODE_REQUEST);
 //                MainActivity.this.setupWebsocket();
                 MainActivity.this.animateLightSaber(true);
                 MainActivity.this.stopLightSaber(); // set button to stop mode
