@@ -13,12 +13,10 @@ var socketConn = null;
 var channelId;
 
 var spawnConnection = function() {
-	// var channelId = randomChannelGenerator(12);
-	var channelId = "iOpC09Pf7e0Z";
+	var channelId = randomChannelGenerator(12);
 	console.log('channelId ' + channelId);
 	var qrcode = new QRCode(document.getElementById("qrcode"), {width: 160, height: 160});
 	
-	var o = {xRot: 0.02, yRot: 0.02, zRot: 0.02};
 	$.ajax({
 		url: 'http://localhost:3000/openConnection',
 		data: {id: channelId}

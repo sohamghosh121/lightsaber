@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private ImageView lightsaberBlade;
 
     private String channelId = "iOpC09Pf7e0Z";
-    private String baseUrl = "http://192.168.0.146:5000/";
+    private String baseUrl = "http://192.168.0.105:5000/";
 
     private Socket socket;
     private JSONObject data;
@@ -61,9 +61,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 // do QR code scanning here
                 Intent qrIntent = new Intent(MainActivity.this, QRCodeActivity.class);
                 startActivityForResult(qrIntent, QRCODE_REQUEST);
-//                MainActivity.this.setupWebsocket();
-                MainActivity.this.animateLightSaber(true);
-                MainActivity.this.stopLightSaber(); // set button to stop mode
             }
         });
     }
@@ -183,6 +180,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             Log.e("SENSOR", "Problem serialising JSON");
         }
 //
+    }
+
+    @Override
+    protected void onActivityResult(int resultCode, int requestCode, Intent data){
+        if (requestCode == QRCODE_REQUEST && resultCode == RESULT_OK){
+            MainActivity.this.channelId = data.getStringExtra("result");
+            Log.d("QRCODE main", "Got result: " + this.channelId);
+            MainActivity.this.setupWebsocket();
+            MainActivity.this.animateLightSaber(true);
+            MainActivity.this.stopLightSaber(); // set button to stop mode
+        }
+
     }
 
     @Override
