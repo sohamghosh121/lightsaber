@@ -26,6 +26,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.TextureView;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.vision.CameraSource;
@@ -35,6 +36,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -127,14 +129,14 @@ public class QRCodeActivity extends AppCompatActivity {
                 if (barcodes.size() != 0) {
                     Barcode thisCode = barcodes.valueAt(0);
                     String result =  thisCode.rawValue;
-
+                    Log.d("QRCODE", "got result " + result);
                     intent.putExtra("result", result);
                     QRCodeActivity.this.setResult(RESULT_OK, intent);
                     QRCodeActivity.this.finish();
                 }
             }
         });
-        mCameraView.getHolder().addCallback(new SurfaceHolder.Callback(){
+        mCameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
 
             @Override
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -156,6 +158,41 @@ public class QRCodeActivity extends AppCompatActivity {
             }
         });
 
+        mCameraView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraFocus(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+            }
+        });
+
+
+
     }
 
+    private final boolean cameraFocus(String focusMode) {
+        Field[] declaredFields = CameraSource.class.getDeclaredFields();
+
+        for (Field field : declaredFields) {
+            if (field.getType() == Camera.class) {
+                field.setAccessible(true);
+                try {
+                    Camera camera = (Camera) field.get(mCameraSource);
+                    if (camera != null) {
+                        Camera.Parameters params = camera.getParameters();
+                        params.setFocusMode(focusMode);
+                        camera.setParameters(params);
+                        return true;
+                    }
+
+                    return false;
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+
+                break;
+            }
+        }
+
+        return false;
+    }
 }

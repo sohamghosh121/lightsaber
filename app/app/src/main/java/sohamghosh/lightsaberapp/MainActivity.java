@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private ImageView lightsaberBlade;
 
     private String channelId = "iOpC09Pf7e0Z";
-    private String baseUrl = "http://192.168.0.105:5000/";
+    private String baseUrl = "http://192.168.0.146:5000/";
 
     private Socket socket;
     private JSONObject data;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onClick(View view) {
                 // do QR code scanning here
                 MainActivity.this.stopDoingSensorStuff();
-//                MainActivity.this.socket.disconnect();
+                MainActivity.this.socket.disconnect();
                 MainActivity.this.animateLightSaber(false);
                 MainActivity.this.startLightSaber(); // set button to start mode
             }
@@ -169,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
+        Log.d("SENSOR", "sensor called");
         float[] values = sensorEvent.values;
         data = new JSONObject();
         try {
@@ -183,7 +184,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
-    protected void onActivityResult(int resultCode, int requestCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        Log.d("QRCODE main", data.getStringExtra("result"));
         if (requestCode == QRCODE_REQUEST && resultCode == RESULT_OK){
             MainActivity.this.channelId = data.getStringExtra("result");
             Log.d("QRCODE main", "Got result: " + this.channelId);

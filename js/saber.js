@@ -45,13 +45,12 @@ function render() {
 	obj.rotation.z = zRot;
 
 	renderer.render( scene, camera );
-
-
 }
 
 render();
 
 function setRotations(o){
+	console.log(o)
 	xRot = o['x'];
 	yRot = o['y'];
 	zRot = o['z'];

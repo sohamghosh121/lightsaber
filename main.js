@@ -18,6 +18,7 @@ function startNewChannel(channelId) {
 	.on('connection', function(socket){
 		console.log('new connection');
 		socket.on('rot-data', function(data){
+			console.log('received')
 			chat.emit('rot-data-recv', data); // forward data to listener on web
 		});
 
