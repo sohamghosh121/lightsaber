@@ -6,14 +6,23 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
 
-var geometry = new THREE.BoxGeometry( 2, 2, 2 );
-var material = new THREE.MeshLambertMaterial( { 
-	color: 0x4e3057 , 
-	emissive: 0x4e3057, 
-	emissiveIntensity: 0.1} );
-var cube = new THREE.Mesh( geometry, material );
+var obj = new LightSaber().geometry;
+scene.add( obj );
 
-scene.add( cube );
+// texture (background)
+
+var texture = new THREE.TextureLoader().load( './../space.jpg' );
+
+var backgroundMesh = new THREE.Mesh(
+	new THREE.PlaneGeometry(8, 5, 0),
+	new THREE.MeshBasicMaterial({
+	    map: texture
+}));
+
+backgroundMesh.side = THREE.BackSide;
+
+backgroundMesh.position.z = 0;
+scene.add(backgroundMesh);
 
 // add lighting
 var ambLight = new THREE.AmbientLight( 0xffffff);
@@ -22,18 +31,18 @@ var light = new THREE.DirectionalLight( 0xffffff, 1 );
 scene.add(ambLight);
 scene.add(light);
 
-camera.position.z = 5;
+camera.position.z = 2;
 
-var xRot = 0
-var yRot = 0;
-var zRot = 0;
+var xRot = 0.12
+var yRot = 0.3;
+var zRot = 0.03;
 
 function render() {
 	requestAnimationFrame( render );
 
-	cube.rotation.x = xRot;
-	cube.rotation.y = yRot;
-	cube.rotation.z = zRot;
+	obj.rotation.x = xRot;
+	obj.rotation.y = yRot;
+	obj.rotation.z = zRot;
 
 	renderer.render( scene, camera );
 

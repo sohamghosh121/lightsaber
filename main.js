@@ -30,6 +30,8 @@ app.listen(PORT, function () {
   console.log('App listening on port ' + PORT + '!')
 });
 
+app.use(express.static('static'));
+
 // server logic 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname + '/index.html'));
