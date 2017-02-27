@@ -1,4 +1,4 @@
-const PORT = 3000;
+const PORT = process.env.PORT || 80;
 
 const path = require('path');
 const express = require('express');
@@ -10,7 +10,9 @@ const express = require('express');
 var app = express();
 var server = require('http').Server(app);
 
-var io = require('socket.io').listen(5000);
+server.listen(PORT, "127.0.0.1")
+
+var io = require('socket.io')(server);
 
 function startNewChannel(channelId) {
 	var chat = io
@@ -25,11 +27,6 @@ function startNewChannel(channelId) {
 		
 	});
 }
-
-
-app.listen(PORT, function () {
-  console.log('App listening on port ' + PORT + '!')
-});
 
 app.use(express.static('static'));
 

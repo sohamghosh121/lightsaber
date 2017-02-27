@@ -13,18 +13,19 @@ var socketConn = null;
 var channelId;
 
 var spawnConnection = function() {
+	$("#qrcode").children().remove();
 	var channelId = randomChannelGenerator(12);
 	console.log('channelId ' + channelId);
 	var qrcode = new QRCode(document.getElementById("qrcode"), {width: 160, height: 160});
 	
 	$.ajax({
-		url: 'http://localhost:3000/openConnection',
+		url: 'http://lowcost-env.gtebssthyf.us-west-2.elasticbeanstalk.com/openConnection',
 		data: {id: channelId}
 	}).done(function(data){
 		
 		if (data.success){
 			qrcode.makeCode(channelId);
-			socketConn = io.connect('http://localhost:5000/' + channelId);
+			socketConn = io.connect('http://lowcost-env.gtebssthyf.us-west-2.elasticbeanstalk.com/' + channelId);
 
 			socketConn.on('connect', function(v){
 				socketConn.on('rot-data-recv', function(data){
